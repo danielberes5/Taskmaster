@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Taskmaster :: Task</title>
+</head>
+<body>
+<div class="container">
+    <form action="#"
+          th:action="@{'/tasks/{id}'(id=$(task.id))}"
+          th:object="${task}"
+          method="PUT">
+        <input type="hidden" th:field="*{account}">
+        <input type="hidden" th:field="*{createdAt}">
+        <h2>Write new Task</h2>
+        <div>
+            <label for="new-task-title">Title</label>
+            <input id="new-task-title" type="text" th:field="*{title}" placeholder="Title"/>
+        </div>
+        <div>
+            <label for="new-task-body">Body</label>
+            <input id="new-task-body" type="text" th:field="*{body}" placeholder="Body"/>
+        </div>
+        <div>
+            <label for="new-task-status">Body</label>
+            <input id="new-task-status" type="text" th:field="*{status}" placeholder="Status"/>
+        </div>
+        <button type="submit">Submit!</button>
+    </form>
+</div>
+</body>
+</html>

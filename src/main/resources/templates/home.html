@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Taskmaster :: Home</title>
+</head>
+<body>
+<div class="container">
+    <h1>Taskmaster</h1>
+    <hr />
+    <ul>
+        <li><a th:href="@{/tasks/new}">New Task</a></li>
+    </ul>
+    <div class="tasks-container">
+        <div class="task" th:each="task : ${tasks}">
+            <h2>
+                <a th:href="@{/tasks/} + ${task.id}}"
+                   th:text="${task.title}">
+                </a>
+            </h2>
+            <h5 th:text="'Task by' + ${task.account.firstName}">Account First Name</h5>
+            <h5 th:text="'Created at ' + ${task.createdAt}">Created At</h5>
+            <h5 th:text="'Updated at ' + ${task.updatedAt}">Updated At</h5>
+            <h5 th:text="'Status ' + ${task.status}">Status</h5>
+            <p th:text="${task.body}">body</p>
+            <br/>
+        </div>
+    </div>
+    <hr />
+    <ul sec:authorize="!isAuthenticated">
+        <li><a th:href="@{/login}">Login</a></li>
+        <li><a th:href="@{/register}">Register</a></li>
+    </ul>
+    <div>
+        <ul sec:authorize="isAuthenticated">
+            <form action="#"
+                  th:action="@{/logout}"
+                  method="POST">
+                <button type="submit">Logout</button>
+            </form>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
