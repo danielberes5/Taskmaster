@@ -1,10 +1,7 @@
 package com.example.taskmaster.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 import java.util.HashSet;
@@ -14,7 +11,10 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "ACCOUNT")
 public class Account {
 
     @Id

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,22 +37,28 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/new")
+    @PreAuthorize("isAuthenticated()")
     public String createNewTask(Model model){
-        Optional<Account> optionalAccount = accountService.findByEmail("user.user@domain.com");
-        if(optionalAccount.isPresent()){
-            Task task = new Task(optionalAccount.get());
-            model.addAttribute("task", task);
-            return "task_new";
-        }
-        else {
-            return "404";
-        }
+
+        Task task = new Task();
+        model.addAttribute("task", task);
+        return "task_new";
     }
 
     @PostMapping("/tasks/new")
-    public String saveNewTask(@ModelAttribute Task task){
+    @PreAuthorize("isAuthenticated()")
+    public String saveNewTask(@ModelAttribute Task task, Principal principal){
+
+        String authUsername = "anonymousUser";
+        if (principal != null) {
+            authUsername = principal.getName();
+        }
+
+        Account account = accountService.findByEmail(authUsername).orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        task.setAccount(account);
         taskService.save(task);
-        return "redirect:/tasks/" + task.getId();
+        return "redirect:/";
     }
 
     @GetMapping("/tasks/{id}/edit")
@@ -69,10 +76,20 @@ public class TaskController {
 
     @PutMapping("/tasks/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String updateTask(@PathVariable Long id, Task task, BindingResult result, Model model){
+    public String updateTask(@PathVariable Long id, Task task, BindingResult result, Model model, Principal principal){
         Optional<Task> optionalTask = taskService.getById(id);
         if(optionalTask.isPresent()){
+
+            String authUsername = "anonymousUser";
+            if (principal != null) {
+                authUsername = principal.getName();
+            }
+
             Task existingTask = optionalTask.get();
+
+            if(!authUsername.equals(existingTask.getAccount().getEmail())){
+                throw new IllegalArgumentException("Account not match");
+            }
 
             existingTask.setTitle(task.getTitle());
             existingTask.setBody(task.getBody());
@@ -86,9 +103,20 @@ public class TaskController {
 
     @GetMapping("/tasks/{id}/delete")
     @PreAuthorize("isAuthenticated()")
-    public String deleteTask(@PathVariable Long id){
+    public String deleteTask(@PathVariable Long id, Principal principal){
         Optional<Task> optionalTask = taskService.getById(id);
         if(optionalTask.isPresent()){
+
+            String authUsername = "anonymousUser";
+            if (principal != null) {
+                authUsername = principal.getName();
+            }
+
+            Task existingTask = optionalTask.get();
+
+            if(!authUsername.equals(existingTask.getAccount().getEmail())){
+                throw new IllegalArgumentException("Account not match");
+            }
 
             taskService.remove(optionalTask.get());
             return "redirect:/";

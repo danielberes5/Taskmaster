@@ -8,13 +8,14 @@
 </head>
 <body>
 <div class="container">
+    <a th:href="@{'/'}">Home</a>
     <form action="#"
-          th:action="@{'/tasks/{id}'(id=$(task.id))}"
+          th:action="@{'/tasks/{id}'(id=${task.id})}"
           th:object="${task}"
           method="PUT">
         <input type="hidden" th:field="*{account}">
         <input type="hidden" th:field="*{createdAt}">
-        <h2>Write new Task</h2>
+        <h2>Edit Task</h2>
         <div>
             <label for="new-task-title">Title</label>
             <input id="new-task-title" type="text" th:field="*{title}" placeholder="Title"/>

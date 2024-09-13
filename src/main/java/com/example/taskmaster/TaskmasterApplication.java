@@ -6,8 +6,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@EntityScan(basePackages = "com.example.taskmaster.models")
-@ComponentScan(basePackages = "com.example.taskmaster.config")
 public class TaskmasterApplication {
 
 	public static void main(String[] args) {

@@ -17,11 +17,11 @@
     <div class="tasks-container">
         <div class="task" th:each="task : ${tasks}">
             <h2>
-                <a th:href="@{/tasks/} + ${task.id}}"
+                <a th:href="@{'/tasks/' + ${task.id}}"
                    th:text="${task.title}">
                 </a>
             </h2>
-            <h5 th:text="'Task by' + ${task.account.firstName}">Account First Name</h5>
+            <h5 th:text="'Task by ' + ${task.account.firstName}">Account First Name</h5>
             <h5 th:text="'Created at ' + ${task.createdAt}">Created At</h5>
             <h5 th:text="'Updated at ' + ${task.updatedAt}">Updated At</h5>
             <h5 th:text="'Status ' + ${task.status}">Status</h5>

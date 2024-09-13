@@ -1,5 +1,6 @@
 package com.example.taskmaster.models;
 
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @Setter
 @Entity
 @NoArgsConstructor
+@Table(name = "AUTHORITY")
 public class Authority implements Serializable {
 
     @Id
